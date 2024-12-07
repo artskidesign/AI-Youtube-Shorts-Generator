@@ -1,14 +1,12 @@
-from openai import OpenAI
 from dotenv import load_dotenv
 import os
 load_dotenv()
 
-client = OpenAI(
-    api_key=os.getenv('OPENAI_API'), # Replace with your OpenAI API key
-)
-
-
+import openai
 import json
+
+openai.api_key = os.getenv('OPENAI_API')
+
 
 def extract_times(json_string):
       try:
@@ -53,8 +51,8 @@ Any Example
 
 def GetHighlight(Transcription):
   print("Getting Highlight from Transcription ") 
-  response = client.chat.completions.create(
-    model="gpt-4o-2024-05-13",
+  response = openai.ChatCompletion.create(
+    model="gpt-4",
     temperature=0.7,
     messages=[
       {"role": "system", "content": system},

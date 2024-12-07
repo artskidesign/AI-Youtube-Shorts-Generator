@@ -115,14 +115,25 @@ def combine_videos(video_with_audio, video_without_audio, output_filename):
         # Load video clips
         clip_with_audio = VideoFileClip(video_with_audio)
         clip_without_audio = VideoFileClip(video_without_audio)
-
+        
+        # Get the audio from the original clip
         audio = clip_with_audio.audio
-
+        
+        # Set the audio duration to match the video duration
+        if audio.duration > clip_without_audio.duration:
+            audio = audio.subclip(0, clip_without_audio.duration)
+        
+        # Combine video and audio
         combined_clip = clip_without_audio.set_audio(audio)
-
-        global Fps
+        
+        # Write the final video with audio
         combined_clip.write_videofile(output_filename, codec='libx264', audio_codec='aac', fps=Fps, preset='medium', bitrate='3000k')
         print(f"Combined video saved successfully as {output_filename}")
+        
+        # Close the clips to free up memory
+        clip_with_audio.close()
+        clip_without_audio.close()
+        combined_clip.close()
     
     except Exception as e:
         print(f"Error combining video and audio: {str(e)}")
@@ -136,6 +147,3 @@ if __name__ == "__main__":
     detect_faces_and_speakers(input_video_path, "DecOut.mp4")
     crop_to_vertical(input_video_path, output_video_path)
     combine_videos(input_video_path, output_video_path, final_video_path)
-
-
-

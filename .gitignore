@@ -1,11 +1,45 @@
-*.pyc
+# Python
+*.py[cod]
+__pycache__/
+*.so
+.Python
+venv/
+env/
+.env
+
+# Distribution / packaging
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+bin/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+
+# Media files
 *.wav
 *.mp3
 *.gif
 *.mp4
 *.webm
-**/__pycache__/
-.env
-.env
-.env
-.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

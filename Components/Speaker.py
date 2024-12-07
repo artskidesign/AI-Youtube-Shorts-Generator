@@ -68,47 +68,31 @@ def detect_faces_and_speakers(input_video_path, output_video_path):
         if audio_frame is None:
             break
         is_speaking_audio = voice_activity_detection(audio_frame, sample_rate)
-        MaxDif = 0
-        Add = []
+        
+        # Default face coordinates (center of frame) in case no face is detected
+        face_coords = [w//4, h//4, 3*w//4, 3*h//4]
+        max_confidence = 0
+        
         for i in range(detections.shape[2]):
             confidence = detections[0, 0, i, 2]
             if confidence > 0.3:  # Confidence threshold
                 box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
                 (x, y, x1, y1) = box.astype("int")
-                face_width = x1 - x
-                face_height = y1 - y
-
+                
+                # Update face coordinates if this is the most confident detection
+                if confidence > max_confidence:
+                    max_confidence = confidence
+                    face_coords = [x, y, x1, y1]
+                
                 # Draw bounding box
                 cv2.rectangle(frame, (x, y), (x1, y1), (0, 255, 0), 2)
-
-                # Assuming lips are approximately at the bottom third of the face
-                lip_distance = abs((y + 2 * face_height // 3) - (y1))
-                Add.append([[x, y, x1, y1], lip_distance])
-
-                MaxDif == max(lip_distance, MaxDif)
-        for i in range(detections.shape[2]):
-            confidence = detections[0, 0, i, 2]
-            if confidence > 0.3:  # Confidence threshold
-                box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
-                (x, y, x1, y1) = box.astype("int")
-                face_width = x1 - x
-                face_height = y1 - y
-
-                # Draw bounding box
-                cv2.rectangle(frame, (x, y), (x1, y1), (0, 255, 0), 2)
-
-                # Assuming lips are approximately at the bottom third of the face
-                lip_distance = abs((y + 2 * face_height // 3) - (y1))
-                print(lip_distance)
-
-                # Combine visual and audio cues
-                if lip_distance >= MaxDif and is_speaking_audio:  # Adjust the threshold as needed
+                
+                if is_speaking_audio:
                     cv2.putText(frame, "Active Speaker", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-                if lip_distance >= MaxDif:
-                    break
 
-        Frames.append([x, y, x1, y1])
-
+        # Always append face coordinates (either from detection or default)
+        Frames.append(face_coords)
+        
         out.write(frame)
         cv2.imshow('Frame', frame)
 

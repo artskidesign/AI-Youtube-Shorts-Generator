@@ -18,7 +18,7 @@ def extractAudio(video_path):
 def crop_video(input_file, output_file, start_time, end_time):
     with VideoFileClip(input_file) as video:
         cropped_video = video.subclip(start_time, end_time)
-        cropped_video.write_videofile(output_file, codec='libx264')
+        cropped_video.write_videofile(output_file, codec='libx264', audio_codec='aac')
 
 # Example usage:
 if __name__ == "__main__":
@@ -29,4 +29,3 @@ if __name__ == "__main__":
     end_time = 49.2   
 
     crop_video(input_file, output_file, start_time, end_time)
-

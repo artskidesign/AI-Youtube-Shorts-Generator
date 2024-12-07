@@ -4,11 +4,11 @@ ffmpeg_python==0.2.0
 moviepy==1.0.3
 numpy==1.26.0
 opencv_python==4.7.0.72
-opencv_python_headless==4.9.0.80
+opencv_python_headless==4.10.0.84
 python-dotenv==1.0.1
 pytubefix
 torch
 webrtcvad-wheels
 pydub
-openai==1.44.1
+openai==0.27.8
 --extra-index-url https://download.pytorch.org/whl/cu121
